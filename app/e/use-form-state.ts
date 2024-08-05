@@ -1,34 +1,13 @@
 import { type Props as NumberInputProps } from "./inputs/number-input"
 import { type Props as CheckboxProps } from "./inputs/checkbox"
 import { type Props as RadioGroupProps } from "./inputs/radio-group"
+import { type Props as TextInputProps } from "./inputs/text-input"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useCallback, useState } from "react"
+import { Field } from "./types"
+import { createUrl, validate } from "./utils"
 
-export type Field =
-  | {
-      type: "radio"
-      name: string
-      label: string
-      options: { label: string; value: string }[]
-      defaultValue?: string
-      required?: boolean
-    }
-  | {
-      type: "checkbox"
-      name: string
-      label: string
-      defaultValue?: boolean
-      required?: boolean
-    }
-  | {
-      type: "number"
-      name: string
-      label: string
-      defaultValue?: number
-      required?: boolean
-    }
-
-export type FieldProps =
+export type Input =
   | {
       type: "number"
       props: NumberInputProps
@@ -41,27 +20,37 @@ export type FieldProps =
       type: "radio"
       props: RadioGroupProps
     }
+  | {
+      type: "text"
+      props: TextInputProps
+    }
 
-const createUrl = (pathname: string, params: URLSearchParams) => {
-  const paramsString = params.toString()
-  const queryString = `${paramsString.length ? "?" : ""}${paramsString}`
-
-  return `${pathname}${queryString}`
+interface Props {
+  fields: Field[]
 }
 
-export const useFormState = ({ fields }: { fields: Field[] }) => {
+export const useFormState = ({ fields }: Props) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
   const [touched, setTouched] = useState(new Map<string, true | undefined>())
   const [errors, setErrors] = useState(new Map<string, string | undefined>())
+  const updateParams = useCallback(
+    ({ key, value }: { key: string; value: string | undefined }) => {
+      const currentParams = Array.from(searchParams.entries())
+      const newParams = currentParams.filter(([k]) => k !== key)
 
-  useEffect(() => {
-    // revalidate
-  }, [searchParams])
+      if (value) {
+        newParams.push([key, value])
+      }
+
+      return createUrl(pathname, new URLSearchParams(newParams))
+    },
+    [pathname, searchParams]
+  )
 
   const handleSubmit =
-    (onSubmit: (formData: FormData) => void) =>
+    (action: (formData: FormData) => void) =>
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
 
@@ -72,9 +61,13 @@ export const useFormState = ({ fields }: { fields: Field[] }) => {
       for (const field of fields) {
         nextTouched.set(field.name, true)
 
-        // TODO: Properly validate fields
-        if (field.required && !formData.get(field.name)) {
-          nextErrors.set(field.name, "Field is required")
+        const { isValid, errorMessage } = validate({
+          field,
+          data: formData.get(field.name),
+        })
+
+        if (!isValid) {
+          nextErrors.set(field.name, errorMessage)
         } else {
           nextErrors.set(field.name, undefined)
         }
@@ -87,13 +80,14 @@ export const useFormState = ({ fields }: { fields: Field[] }) => {
         return
       }
 
-      onSubmit?.(formData)
+      action?.(formData)
     }
 
-  const fieldProps: FieldProps[] = fields.map((field) => {
+  const inputs: Input[] = fields.map((field) => {
     const props = {
-      name: field.name,
       label: field.label,
+      name: field.name,
+      required: field.required,
       error: touched.get(field.name) && errors.get(field.name),
       onBlur() {
         setTouched((prev) => new Map(prev.set(field.name, true)))
@@ -107,39 +101,31 @@ export const useFormState = ({ fields }: { fields: Field[] }) => {
           props: {
             ...props,
             checked: searchParams.get(field.name) === "true",
-            onCheckedChange(next: boolean) {
-              const currentParams = Array.from(searchParams.entries())
-              const newParams = currentParams.filter(
-                ([key]) => key !== field.name
+            onChange(e) {
+              router.replace(
+                updateParams({
+                  key: field.name,
+                  value: String(e.currentTarget.checked),
+                })
               )
-
-              const href = createUrl(
-                pathname,
-                new URLSearchParams([...newParams, [field.name, String(next)]])
-              )
-
-              router.push(href)
             },
           },
         }
       case "number":
-        const value = Number(searchParams.get(field.name))
-
         return {
           type: "number" as const,
           props: {
             ...props,
-            value: isNaN(value) ? value : field.defaultValue,
-            onChange(e: React.ChangeEvent<HTMLInputElement>) {
-              const currentParams = Array.from(searchParams.entries())
-              const newParams = [
-                ...currentParams.filter(([key]) => key !== field.name),
-                [field.name, e.currentTarget.value],
-              ]
-
-              const href = createUrl(pathname, new URLSearchParams(newParams))
-
-              router.push(href)
+            min: field.min,
+            max: field.max,
+            value: searchParams.get(field.name) ?? field.defaultValue ?? "",
+            onChange(e) {
+              router.replace(
+                updateParams({
+                  key: field.name,
+                  value: e.currentTarget.value,
+                })
+              )
             },
           },
         }
@@ -150,21 +136,34 @@ export const useFormState = ({ fields }: { fields: Field[] }) => {
             ...props,
             options: field.options,
             value: searchParams.get(field.name) ?? field.defaultValue,
-            onChange(next: string) {
-              const currentParams = Array.from(searchParams.entries())
-              const newParams = [
-                ...currentParams.filter(([key]) => key !== field.name),
-                [field.name, next],
-              ]
-
-              const href = createUrl(pathname, new URLSearchParams(newParams))
-
-              router.push(href)
+            onChange(e) {
+              router.replace(
+                updateParams({
+                  key: field.name,
+                  value: e.currentTarget.value,
+                })
+              )
+            },
+          },
+        }
+      case "text":
+        return {
+          type: "text" as const,
+          props: {
+            ...props,
+            value: searchParams.get(field.name) ?? field.defaultValue ?? "",
+            onChange(e) {
+              router.replace(
+                updateParams({
+                  key: field.name,
+                  value: e.currentTarget.value,
+                })
+              )
             },
           },
         }
     }
   })
 
-  return { fieldProps, handleSubmit }
+  return { handleSubmit, inputs }
 }

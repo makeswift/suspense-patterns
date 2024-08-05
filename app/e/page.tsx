@@ -9,13 +9,14 @@ async function action(formData: FormData) {
 export default function Page() {
   return (
     <ProductDetailsForm
-      onSubmit={action}
+      action={action}
       fields={[
         {
           type: "number",
           name: "quantity",
           label: "Quantity",
           required: true,
+          min: 10,
         },
         {
           type: "radio",
@@ -26,6 +27,7 @@ export default function Page() {
             { label: "Medium", value: "medium" },
             { label: "Large", value: "large" },
           ],
+          required: true,
         },
         {
           type: "radio",
