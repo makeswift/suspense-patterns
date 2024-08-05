@@ -8,22 +8,10 @@ import { Field } from "./types"
 import { createUrl, validate } from "./utils"
 
 export type Input =
-  | {
-      type: "number"
-      props: NumberInputProps
-    }
-  | {
-      type: "checkbox"
-      props: CheckboxProps
-    }
-  | {
-      type: "radio"
-      props: RadioGroupProps
-    }
-  | {
-      type: "text"
-      props: TextInputProps
-    }
+  | { type: "number"; props: NumberInputProps }
+  | { type: "checkbox"; props: CheckboxProps }
+  | { type: "radio"; props: RadioGroupProps }
+  | { type: "text"; props: TextInputProps }
 
 interface Props {
   fields: Field[]
