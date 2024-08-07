@@ -2,7 +2,7 @@ import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
 import * as Label from "@radix-ui/react-label"
 import React from "react"
 
-export interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface Props {
   label: string
   name: string
   options: {
@@ -11,15 +11,15 @@ export interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   }[]
   required?: boolean
   errors?: string[]
+  defaultValue?: string
 }
 
 export function RadioGroup({
   label,
   name,
-  value,
   options,
   errors,
-  ...props
+  defaultValue,
 }: Props) {
   return (
     <div className="space-y-2">
@@ -29,11 +29,11 @@ export function RadioGroup({
         {options.map((option) => (
           <div key={option.value}>
             <input
-              {...props}
               type="radio"
               id={option.value}
               name={name}
               value={option.value}
+              defaultChecked={option.value === defaultValue}
             />
             <label htmlFor={option.value}>{option.label}</label>
           </div>

@@ -16,7 +16,8 @@ import { useFormState } from "react-dom"
 import { TextInput } from "./inputs/text-input"
 import { parseWithZod } from "@conform-to/zod"
 import { generateZodSchema } from "./utils"
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
+import { useRouter, usePathname, useSearchParams } from "next/navigation"
 
 interface Props {
   fields: Field[]
@@ -25,10 +26,32 @@ interface Props {
 
 function FormField({ field }: { field: Field }) {
   const [meta] = useField(field.name)
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const router = useRouter()
+  const createQueryString = useCallback(
+    ({ key, value }: { key: string; value: unknown }) => {
+      const currentParams = Array.from(searchParams.entries())
+      const newParams = currentParams.filter(([k]) => k !== key)
+
+      if (value) {
+        newParams.push([key, String(value)])
+      }
+
+      return new URLSearchParams(newParams)
+    },
+    [searchParams]
+  )
 
   useEffect(() => {
-    console.log({ value: meta.value })
-  }, [meta.value])
+    router.push(
+      `${pathname}?${createQueryString({
+        key: field.name,
+        value: meta.value,
+      })}`,
+      { scroll: false }
+    )
+  }, [router, pathname, meta.value, field.name, createQueryString])
 
   switch (field.type) {
     case "number":
@@ -37,6 +60,7 @@ function FormField({ field }: { field: Field }) {
           {...getInputProps(meta, { type: "number" })}
           label={field.label}
           errors={meta.errors}
+          defaultValue={searchParams.get(field.name) ?? undefined}
         />
       )
     case "text":
@@ -45,6 +69,7 @@ function FormField({ field }: { field: Field }) {
           {...getInputProps(meta, { type: "number" })}
           label={field.label}
           errors={meta.errors}
+          defaultValue={searchParams.get(field.name) ?? undefined}
         />
       )
     case "checkbox":
@@ -53,6 +78,7 @@ function FormField({ field }: { field: Field }) {
           {...getInputProps(meta, { type: "checkbox" })}
           label={field.label}
           errors={meta.errors}
+          defaultChecked={searchParams.get(field.name) === "on"}
         />
       )
     case "radio":
@@ -62,6 +88,7 @@ function FormField({ field }: { field: Field }) {
           label={field.label}
           options={field.options}
           errors={meta.errors}
+          defaultValue={searchParams.get(field.name) ?? undefined}
         />
       )
   }
