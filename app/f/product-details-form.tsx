@@ -1,8 +1,8 @@
 "use client"
 
 import {
-  FieldName,
   FormProvider,
+  getFieldsetProps,
   getInputProps,
   SubmissionResult,
   useField,
@@ -44,7 +44,7 @@ function FormField({ field }: { field: Field }) {
   )
 
   useEffect(() => {
-    router.push(
+    router.replace(
       `${pathname}?${createQueryString({
         key: field.name,
         value: meta.value,
@@ -66,7 +66,7 @@ function FormField({ field }: { field: Field }) {
     case "text":
       return (
         <TextInput
-          {...getInputProps(meta, { type: "number" })}
+          {...getInputProps(meta, { type: "text" })}
           label={field.label}
           errors={meta.errors}
           defaultValue={searchParams.get(field.name) ?? undefined}
