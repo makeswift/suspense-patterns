@@ -1,11 +1,3 @@
-import { cookies } from 'next/headers'
-
-export async function CartCount() {
-  const cookieList = cookies()
-
-  await new Promise((resolve) => setTimeout(resolve, 2000))
-
-  const count = cookieList.get('cart-count')?.value ?? 'No count'
-
+export async function CartCount({ count }: { count: number | Promise<number> }) {
   return <p>Count: {count}</p>
 }

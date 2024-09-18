@@ -1,8 +1,7 @@
 import { Suspense } from 'react'
 import { CartCount } from './cart-count'
 
-export async function Header() {
-  console.log('render header')
+export async function Header({ cartCount }: { cartCount: number | Promise<number> }) {
   return (
     <nav>
       <ul>
@@ -20,7 +19,7 @@ export async function Header() {
         </li>
       </ul>
       <Suspense fallback={<p>Loading cart count...</p>}>
-        <CartCount />
+        <CartCount count={cartCount} />
       </Suspense>
     </nav>
   )
