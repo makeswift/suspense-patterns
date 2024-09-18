@@ -1,56 +1,50 @@
-import { SubmissionResult } from "@conform-to/react"
-import { ProductDetailsForm } from "./product-details-form"
-import { generateZodSchema } from "./utils"
-import { parseWithZod } from "@conform-to/zod"
-import { redirect } from "next/navigation"
+import { SubmissionResult } from '@conform-to/react'
+import { ProductDetailsForm } from './product-details-form'
+import { generateZodSchema } from './utils'
+import { parseWithZod } from '@conform-to/zod'
+import { redirect } from 'next/navigation'
+import { Suspense } from 'react'
 
 const fields = [
   {
-    type: "number" as const,
-    name: "quantity",
-    label: "Quantity",
+    type: 'number' as const,
+    name: 'quantity',
+    label: 'Quantity',
     required: true,
     min: 10,
   },
   {
-    type: "radio" as const,
-    name: "size",
-    label: "Size",
+    type: 'radio' as const,
+    name: 'size',
+    label: 'Size',
     options: [
-      { label: "Small", value: "small" },
-      { label: "Medium", value: "medium" },
-      { label: "Large", value: "large" },
+      { label: 'Small', value: 'small' },
+      { label: 'Medium', value: 'medium' },
+      { label: 'Large', value: 'large' },
     ],
     required: true,
   },
   {
-    type: "radio" as const,
-    name: "color",
-    label: "Color",
+    type: 'radio' as const,
+    name: 'color',
+    label: 'Color',
     options: [
-      { label: "Red", value: "red" },
-      { label: "Green", value: "green" },
-      { label: "Blue", value: "blue" },
+      { label: 'Red', value: 'red' },
+      { label: 'Green', value: 'green' },
+      { label: 'Blue', value: 'blue' },
     ],
   },
   {
-    type: "checkbox" as const,
-    name: "insurance",
-    label: "Include insurance?",
+    type: 'checkbox' as const,
+    name: 'insurance',
+    label: 'Include insurance?',
     required: true,
   },
 ]
 
-export default function Page({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string }
-}) {
-  async function action(
-    prevState: unknown,
-    formData: FormData
-  ): Promise<SubmissionResult> {
-    "use server"
+export default function Page({ searchParams }: { searchParams: { [key: string]: string } }) {
+  async function action(prevState: unknown, formData: FormData): Promise<SubmissionResult> {
+    'use server'
 
     const submission = parseWithZod(formData, {
       schema: generateZodSchema(fields),
@@ -58,12 +52,16 @@ export default function Page({
 
     console.log({ submission })
 
-    if (submission.status !== "success") {
+    if (submission.status !== 'success') {
       return submission.reply()
     }
 
-    return redirect("/f?value=")
+    return redirect('/f?value=')
   }
 
-  return <ProductDetailsForm action={action} fields={fields} />
+  return (
+    <Suspense>
+      <ProductDetailsForm action={action} fields={fields} />
+    </Suspense>
+  )
 }
