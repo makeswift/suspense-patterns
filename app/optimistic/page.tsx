@@ -6,12 +6,12 @@ export default function Page() {
   return (
     <MessagesForm
       initialMessages={initialMessages}
-      action={async function sendMessage(messages: string[], message: string) {
+      action={async function sendMessage(messages: string[], formData: FormData) {
         'use server'
 
         await new Promise((resolve) => setTimeout(resolve, 1000))
 
-        return [...messages, message]
+        return [...messages, formData.get('message') as string]
       }}
     />
   )
