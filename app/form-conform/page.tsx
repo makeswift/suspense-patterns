@@ -42,7 +42,11 @@ const fields = [
   },
 ]
 
-export default function Page({ searchParams }: { searchParams: { [key: string]: string } }) {
+export default function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string }>
+}) {
   async function action(prevState: unknown, formData: FormData): Promise<SubmissionResult> {
     'use server'
 

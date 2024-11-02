@@ -11,7 +11,9 @@ export default function Page() {
   )
 }
 
-async function Boom(): Promise<JSX.Element> {
+export const dynamic = 'force-dynamic'
+
+async function Boom(): Promise<React.ReactElement> {
   await new Promise((resolve) => setTimeout(resolve, 1000))
 
   throw new Error('Boom!')

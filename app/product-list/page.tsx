@@ -1,17 +1,18 @@
-import { getProducts, Colors, Sizes } from "@/lib/fetch"
-import { ProductList } from "./product-list"
+import { getProducts, Colors, Sizes } from '@/lib/fetch'
+import { ProductList } from './product-list'
 
 interface Props {
-  searchParams: {
+  searchParams: Promise<{
     color?: string[]
     size?: string[]
-  }
+  }>
 }
 
 export default async function Page({ searchParams }: Props) {
+  const { color, size } = await searchParams
   const products = await getProducts({
-    color: searchParams.color ?? [],
-    size: searchParams.size ?? [],
+    color: color ?? [],
+    size: size ?? [],
   })
 
   return (
@@ -21,13 +22,13 @@ export default async function Page({ searchParams }: Props) {
         products={products}
         facets={[
           {
-            name: "Color",
-            value: "color",
+            name: 'Color',
+            value: 'color',
             options: Colors,
           },
           {
-            name: "Size",
-            value: "size",
+            name: 'Size',
+            value: 'size',
             options: Sizes,
           },
         ]}
