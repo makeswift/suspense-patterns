@@ -25,8 +25,7 @@ export function MessagesForm({
           event.preventDefault()
 
           startTransition(async () => {
-            requestFormReset(event.currentTarget)
-
+            setMessage('')
             addOptimisticMessage(message)
             formAction(message)
           })
