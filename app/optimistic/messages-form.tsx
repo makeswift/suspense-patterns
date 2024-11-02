@@ -34,7 +34,7 @@ export function MessagesForm({
           })
         }}
       >
-        <input type="text" name="message" />
+        <input className="bg-slate-800" type="text" name="message" />
         <button type="submit" disabled={isPending}>
           {isPending ? 'Sending...' : 'Send'}
         </button>
