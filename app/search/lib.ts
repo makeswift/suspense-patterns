@@ -1,6 +1,8 @@
 import { z } from 'zod'
 
 export async function search(query: string): Promise<SearchResult[]> {
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
   if (query === '') return []
 
   return [

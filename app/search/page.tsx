@@ -11,8 +11,6 @@ export default async function Page() {
       searchAction={async (state: State, formData: FormData) => {
         'use server'
 
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-
         const submission = parseWithZod(formData, { schema })
 
         if (submission.status !== 'success') {
