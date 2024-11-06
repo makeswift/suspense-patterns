@@ -21,7 +21,7 @@ export default async function Page() {
 
         const { query } = submission.value
 
-        const results = await search(query)
+        const results = await search(query ?? '')
 
         return { lastResult: submission.reply({ resetForm: true }), results }
       }}

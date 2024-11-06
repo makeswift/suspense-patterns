@@ -19,5 +19,5 @@ export type SearchResult = { id: number; title: string }
 export type SearchParams = { [key: string]: string | string[] | undefined }
 
 export const schema = z.object({
-  query: z.string(),
+  query: z.string().optional(),
 })
