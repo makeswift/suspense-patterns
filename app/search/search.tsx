@@ -44,7 +44,7 @@ export function Search({
           {showResults && (
             <div>
               <SearchResults results={results} />
-              {isPending && <div>Loading...</div>}
+              {isPending && <div>Loading results for "{deferredQuery}"...</div>}
             </div>
           )}
         </div>
