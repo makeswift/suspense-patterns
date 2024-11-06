@@ -8,26 +8,21 @@ import { SubmissionResult } from '@conform-to/react'
 export function Search({
   searchAction,
 }: {
-  searchAction: Action<
-    { lastResult: SubmissionResult | null; results: SearchResult[] | null },
-    FormData
-  >
+  searchAction: Action<{ lastResult: SubmissionResult | null; results: SearchResult[] }, FormData>
 }) {
   const [{ results }, formAction, isPending] = useActionState(searchAction, {
     lastResult: null,
-    results: null,
+    results: [],
   })
   const [query, setQuery] = useState('')
   const deferredQuery = useDeferredValue(query)
+  const [showResults, setShowResults] = useState(false)
 
   useEffect(() => {
-    if (deferredQuery === '') return
-
     startTransition(async () => {
       const formData = new FormData()
       formData.append('query', deferredQuery)
       formAction(formData)
-      console.log({ deferredQuery })
     })
   }, [deferredQuery])
 
@@ -38,14 +33,20 @@ export function Search({
           name="query"
           className="bg-slate-900"
           value={query}
+          onFocus={() => setShowResults(true)}
+          onBlur={() => setShowResults(false)}
           onChange={(event) => {
             setQuery(event.target.value)
           }}
         />
         <button type="submit">Search</button>
         <div>
-          {results && <SearchResults results={results} />}
-          {isPending && <div>Loading...</div>}
+          {showResults && (
+            <div>
+              <SearchResults results={results} />
+              {isPending && <div>Loading...</div>}
+            </div>
+          )}
         </div>
       </form>
     </div>

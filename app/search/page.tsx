@@ -3,7 +3,7 @@ import { schema, search, SearchResult } from './lib'
 import { Search } from './search'
 import { parseWithZod } from '@conform-to/zod'
 
-type State = { lastResult: SubmissionResult | null; results: SearchResult[] | null }
+type State = { lastResult: SubmissionResult | null; results: SearchResult[] }
 
 export default async function Page() {
   return (
