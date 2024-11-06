@@ -19,12 +19,14 @@ export function Search({
   const [showResults, setShowResults] = useState(false)
 
   useEffect(() => {
+    if (!showResults) return
+
     startTransition(async () => {
       const formData = new FormData()
       formData.append('query', deferredQuery)
       formAction(formData)
     })
-  }, [deferredQuery])
+  }, [showResults, deferredQuery])
 
   return (
     <div>
