@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { useFormStatus } from "react-dom"
+import { useFormStatus } from "react-dom";
 
 export function LoadMoreButton(
-  props: React.ButtonHTMLAttributes<HTMLButtonElement>
+  props: React.ButtonHTMLAttributes<HTMLButtonElement>,
 ) {
-  const formStatus = useFormStatus()
+  const formStatus = useFormStatus();
 
   return (
     <button
@@ -15,5 +15,5 @@ export function LoadMoreButton(
     >
       {formStatus.pending ? "Loading..." : "Load More"}
     </button>
-  )
+  );
 }

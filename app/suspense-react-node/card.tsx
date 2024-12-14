@@ -1,6 +1,6 @@
 interface Props {
-  name: string
-  price: React.ReactNode
+  name: string;
+  price: React.ReactNode;
 }
 
 export function Card({ name, price }: Props) {
@@ -9,5 +9,5 @@ export function Card({ name, price }: Props) {
       <div className="text-xl mb-2">{name}</div>
       <div className="text-md">{price}</div>
     </div>
-  )
+  );
 }

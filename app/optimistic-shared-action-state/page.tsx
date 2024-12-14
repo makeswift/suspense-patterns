@@ -1,6 +1,6 @@
-import { SubmissionResult } from '@conform-to/react'
-import { decrement, increment } from './actions'
-import { Counter } from './counter'
+import { SubmissionResult } from "@conform-to/react";
+import { decrement, increment } from "./actions";
+import { Counter } from "./counter";
 
 export default function Page() {
   async function action(
@@ -8,28 +8,28 @@ export default function Page() {
       lastResult,
       count,
     }: {
-      lastResult: SubmissionResult | null
-      count: number
+      lastResult: SubmissionResult | null;
+      count: number;
     },
     formData: FormData,
   ): Promise<{ lastResult: SubmissionResult | null; count: number }> {
-    'use server'
+    "use server";
 
-    await new Promise((resolve) => setTimeout(resolve, 250))
+    await new Promise((resolve) => setTimeout(resolve, 250));
 
-    const intent = formData.get('intent')
+    const intent = formData.get("intent");
 
     switch (intent) {
-      case 'decrement':
-        return decrement({ lastResult, count }, formData)
+      case "decrement":
+        return decrement({ lastResult, count }, formData);
 
-      case 'increment':
-        return increment({ lastResult, count }, formData)
+      case "increment":
+        return increment({ lastResult, count }, formData);
 
       default:
-        return { lastResult, count }
+        return { lastResult, count };
     }
   }
 
-  return <Counter action={action} />
+  return <Counter action={action} />;
 }

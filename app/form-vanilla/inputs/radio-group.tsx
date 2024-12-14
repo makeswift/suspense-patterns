@@ -1,16 +1,16 @@
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
-import * as Label from "@radix-ui/react-label"
-import React from "react"
+import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
+import * as Label from "@radix-ui/react-label";
+import React from "react";
 
 export interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string
-  name: string
+  label: string;
+  name: string;
   options: {
-    label: string
-    value: string
-  }[]
-  required?: boolean
-  error?: string
+    label: string;
+    value: string;
+  }[];
+  required?: boolean;
+  error?: string;
 }
 
 export function RadioGroup({
@@ -42,5 +42,5 @@ export function RadioGroup({
       </fieldset>
       <div className="text-red-500 text-sm">{error}</div>
     </div>
-  )
+  );
 }

@@ -1,6 +1,6 @@
 export interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string
-  error?: string
+  label: string;
+  error?: string;
 }
 
 export function TextInput({ name, label, error, ...props }: Props) {
@@ -14,5 +14,5 @@ export function TextInput({ name, label, error, ...props }: Props) {
       </div>
       <div className="text-red-500 text-sm">{error}</div>
     </div>
-  )
+  );
 }

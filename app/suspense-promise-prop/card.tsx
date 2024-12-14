@@ -1,16 +1,16 @@
-import { Suspense, use } from "react"
+import { Suspense, use } from "react";
 
-import { format } from "@/lib/utils"
+import { format } from "@/lib/utils";
 
 interface Props {
-  name: string
-  price: number | Promise<number>
+  name: string;
+  price: number | Promise<number>;
 }
 
 function Price({ price }: { price: number | Promise<number> }) {
-  const value = use(Promise.resolve(price))
+  const value = use(Promise.resolve(price));
 
-  return <>${format(value)}</>
+  return <>${format(value)}</>;
 }
 
 export function Card({ name, price }: Props) {
@@ -23,5 +23,5 @@ export function Card({ name, price }: Props) {
         </Suspense>
       </div>
     </div>
-  )
+  );
 }

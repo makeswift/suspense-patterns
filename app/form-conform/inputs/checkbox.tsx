@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 export interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string
-  errors?: string[]
+  label: string;
+  errors?: string[];
 }
 
 export function Checkbox({ name, label, errors, checked, ...props }: Props) {
@@ -24,5 +24,5 @@ export function Checkbox({ name, label, errors, checked, ...props }: Props) {
         </div>
       ))}
     </div>
-  )
+  );
 }

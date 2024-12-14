@@ -1,30 +1,30 @@
-import { FilterOption } from "./filter-option"
-import { ProductCard } from "./product-card"
+import { FilterOption } from "./filter-option";
+import { ProductCard } from "./product-card";
 
 interface Product {
-  id: string
-  name: string
-  price: number
-  color: string
-  size: string
+  id: string;
+  name: string;
+  price: number;
+  color: string;
+  size: string;
 }
 
 interface Option {
-  name: string
-  value: string
+  name: string;
+  value: string;
 }
 
 interface Facet {
-  name: string
-  value: string
-  options: Option[]
+  name: string;
+  value: string;
+  options: Option[];
 }
 
 interface Props {
-  title: string
-  products: Product[]
-  activeFacets?: Facet[]
-  facets?: Facet[]
+  title: string;
+  products: Product[];
+  activeFacets?: Facet[];
+  facets?: Facet[];
 }
 
 export function ProductList({ title, products, facets }: Props) {
@@ -57,5 +57,5 @@ export function ProductList({ title, products, facets }: Props) {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-import { Suspense } from 'react'
-import { ProductDetailsForm } from './product-details-form'
+import { Suspense } from "react";
+import { ProductDetailsForm } from "./product-details-form";
 
 async function action(formData: FormData) {
-  'use server'
+  "use server";
 
-  console.log(formData)
+  console.log(formData);
 }
 
 export default function Page() {
@@ -14,41 +14,41 @@ export default function Page() {
         action={action}
         fields={[
           {
-            type: 'number',
-            name: 'quantity',
-            label: 'Quantity',
+            type: "number",
+            name: "quantity",
+            label: "Quantity",
             required: true,
             min: 10,
           },
           {
-            type: 'radio',
-            name: 'size',
-            label: 'Size',
+            type: "radio",
+            name: "size",
+            label: "Size",
             options: [
-              { label: 'Small', value: 'small' },
-              { label: 'Medium', value: 'medium' },
-              { label: 'Large', value: 'large' },
+              { label: "Small", value: "small" },
+              { label: "Medium", value: "medium" },
+              { label: "Large", value: "large" },
             ],
             required: true,
           },
           {
-            type: 'radio',
-            name: 'color',
-            label: 'Color',
+            type: "radio",
+            name: "color",
+            label: "Color",
             options: [
-              { label: 'Red', value: 'red' },
-              { label: 'Green', value: 'green' },
-              { label: 'Blue', value: 'blue' },
+              { label: "Red", value: "red" },
+              { label: "Green", value: "green" },
+              { label: "Blue", value: "blue" },
             ],
           },
           {
-            type: 'checkbox',
-            name: 'insurance',
-            label: 'Include insurance?',
+            type: "checkbox",
+            name: "insurance",
+            label: "Include insurance?",
             required: true,
           },
         ]}
       />
     </Suspense>
-  )
+  );
 }

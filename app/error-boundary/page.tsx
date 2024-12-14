@@ -1,5 +1,5 @@
-import { Suspense } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
 export default function Page() {
   return (
@@ -8,13 +8,13 @@ export default function Page() {
         <Boom />
       </Suspense>
     </ErrorBoundary>
-  )
+  );
 }
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 async function Boom(): Promise<React.ReactElement> {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  throw new Error('Boom!')
+  throw new Error("Boom!");
 }

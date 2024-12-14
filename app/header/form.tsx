@@ -1,23 +1,23 @@
-"use client"
+"use client";
 
-import { useFormState } from "react-dom"
-import { LoadMoreButton } from "./load-more-button"
-import { useState } from "react"
+import { useFormState } from "react-dom";
+import { LoadMoreButton } from "./load-more-button";
+import { useState } from "react";
 
-export type State = { hasMore: boolean; results: string[] }
+export type State = { hasMore: boolean; results: string[] };
 
-export type Action = (prevState: State, formData: FormData) => Promise<State>
+export type Action = (prevState: State, formData: FormData) => Promise<State>;
 
 interface Props {
-  action: Action
-  children: React.ReactNode
+  action: Action;
+  children: React.ReactNode;
 }
 
 export function Form({ action, children }: Props) {
   const [state, formAction] = useFormState(action, {
     hasMore: false,
     results: [],
-  })
+  });
 
   return (
     <form action={formAction}>
@@ -29,5 +29,5 @@ export function Form({ action, children }: Props) {
       </ul>
       {state.hasMore && <LoadMoreButton />}
     </form>
-  )
+  );
 }

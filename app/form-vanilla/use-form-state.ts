@@ -1,75 +1,75 @@
-import { type Props as NumberInputProps } from "./inputs/number-input"
-import { type Props as CheckboxProps } from "./inputs/checkbox"
-import { type Props as RadioGroupProps } from "./inputs/radio-group"
-import { type Props as TextInputProps } from "./inputs/text-input"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useCallback, useState } from "react"
-import { Field } from "./types"
-import { createUrl, validate } from "./utils"
+import { type Props as NumberInputProps } from "./inputs/number-input";
+import { type Props as CheckboxProps } from "./inputs/checkbox";
+import { type Props as RadioGroupProps } from "./inputs/radio-group";
+import { type Props as TextInputProps } from "./inputs/text-input";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useState } from "react";
+import { Field } from "./types";
+import { createUrl, validate } from "./utils";
 
 export type Input =
   | { type: "number"; props: NumberInputProps }
   | { type: "checkbox"; props: CheckboxProps }
   | { type: "radio"; props: RadioGroupProps }
-  | { type: "text"; props: TextInputProps }
+  | { type: "text"; props: TextInputProps };
 
 interface Props {
-  fields: Field[]
+  fields: Field[];
 }
 
 export const useFormState = ({ fields }: Props) => {
-  const searchParams = useSearchParams()
-  const router = useRouter()
-  const pathname = usePathname()
-  const [touched, setTouched] = useState(new Map<string, true | undefined>())
-  const [errors, setErrors] = useState(new Map<string, string | undefined>())
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [touched, setTouched] = useState(new Map<string, true | undefined>());
+  const [errors, setErrors] = useState(new Map<string, string | undefined>());
   const updateParams = useCallback(
     ({ key, value }: { key: string; value: string | undefined }) => {
-      const currentParams = Array.from(searchParams.entries())
-      const newParams = currentParams.filter(([k]) => k !== key)
+      const currentParams = Array.from(searchParams.entries());
+      const newParams = currentParams.filter(([k]) => k !== key);
 
       if (value) {
-        newParams.push([key, value])
+        newParams.push([key, value]);
       }
 
-      return createUrl(pathname, new URLSearchParams(newParams))
+      return createUrl(pathname, new URLSearchParams(newParams));
     },
-    [pathname, searchParams]
-  )
+    [pathname, searchParams],
+  );
 
   const handleSubmit =
     (action: (formData: FormData) => void) =>
     (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
+      e.preventDefault();
 
-      const formData = new FormData(e.currentTarget)
-      const nextTouched = new Map(touched)
-      const nextErrors = new Map(errors)
+      const formData = new FormData(e.currentTarget);
+      const nextTouched = new Map(touched);
+      const nextErrors = new Map(errors);
 
       for (const field of fields) {
-        nextTouched.set(field.name, true)
+        nextTouched.set(field.name, true);
 
         const { isValid, errorMessage } = validate({
           field,
           data: formData.get(field.name),
-        })
+        });
 
         if (!isValid) {
-          nextErrors.set(field.name, errorMessage)
+          nextErrors.set(field.name, errorMessage);
         } else {
-          nextErrors.set(field.name, undefined)
+          nextErrors.set(field.name, undefined);
         }
       }
 
-      setTouched(nextTouched)
-      setErrors(nextErrors)
+      setTouched(nextTouched);
+      setErrors(nextErrors);
 
       if (Array.from(nextErrors.values()).some((error) => Boolean(error))) {
-        return
+        return;
       }
 
-      action?.(formData)
-    }
+      action?.(formData);
+    };
 
   const inputs: Input[] = fields.map((field) => {
     const props = {
@@ -78,9 +78,9 @@ export const useFormState = ({ fields }: Props) => {
       required: field.required,
       error: touched.get(field.name) && errors.get(field.name),
       onBlur() {
-        setTouched((prev) => new Map(prev.set(field.name, true)))
+        setTouched((prev) => new Map(prev.set(field.name, true)));
       },
-    }
+    };
 
     switch (field.type) {
       case "checkbox":
@@ -94,11 +94,11 @@ export const useFormState = ({ fields }: Props) => {
                 updateParams({
                   key: field.name,
                   value: String(e.currentTarget.checked),
-                })
-              )
+                }),
+              );
             },
           },
-        }
+        };
       case "number":
         return {
           type: "number" as const,
@@ -112,11 +112,11 @@ export const useFormState = ({ fields }: Props) => {
                 updateParams({
                   key: field.name,
                   value: e.currentTarget.value,
-                })
-              )
+                }),
+              );
             },
           },
-        }
+        };
       case "radio":
         return {
           type: "radio" as const,
@@ -129,11 +129,11 @@ export const useFormState = ({ fields }: Props) => {
                 updateParams({
                   key: field.name,
                   value: e.currentTarget.value,
-                })
-              )
+                }),
+              );
             },
           },
-        }
+        };
       case "text":
         return {
           type: "text" as const,
@@ -145,13 +145,13 @@ export const useFormState = ({ fields }: Props) => {
                 updateParams({
                   key: field.name,
                   value: e.currentTarget.value,
-                })
-              )
+                }),
+              );
             },
           },
-        }
+        };
     }
-  })
+  });
 
-  return { handleSubmit, inputs }
-}
+  return { handleSubmit, inputs };
+};

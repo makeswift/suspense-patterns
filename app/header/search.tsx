@@ -1,8 +1,8 @@
-import { Action, Form } from "./form"
-import { SubmitButton } from "./submit-button"
+import { Action, Form } from "./form";
+import { SubmitButton } from "./submit-button";
 
 interface Props {
-  action: Action
+  action: Action;
 }
 
 export function Search({ action }: Props) {
@@ -12,5 +12,5 @@ export function Search({ action }: Props) {
       <input className="text-black" id="query" type="text" name="query" />
       <SubmitButton name="intent" value="search" />
     </Form>
-  )
+  );
 }

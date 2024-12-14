@@ -1,7 +1,11 @@
-import { Suspense } from 'react'
-import { CartCount } from './cart-count'
+import { Suspense } from "react";
+import { CartCount } from "./cart-count";
 
-export async function Header({ cartCount }: { cartCount: number | Promise<number> }) {
+export async function Header({
+  cartCount,
+}: {
+  cartCount: number | Promise<number>;
+}) {
   return (
     <nav>
       <ul>
@@ -22,5 +26,5 @@ export async function Header({ cartCount }: { cartCount: number | Promise<number
         <CartCount count={cartCount} />
       </Suspense>
     </nav>
-  )
+  );
 }

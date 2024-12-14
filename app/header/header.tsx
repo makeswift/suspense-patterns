@@ -1,10 +1,10 @@
-import { Action } from "./form"
-import { Search } from "./search"
+import { Action } from "./form";
+import { Search } from "./search";
 
-export type { Action }
+export type { Action };
 
 interface Props {
-  action: Action
+  action: Action;
 }
 
 export function Header({ action }: Props) {
@@ -13,5 +13,5 @@ export function Header({ action }: Props) {
       Header
       <Search action={action} />
     </div>
-  )
+  );
 }

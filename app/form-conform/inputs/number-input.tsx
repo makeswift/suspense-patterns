@@ -1,6 +1,6 @@
 export interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string
-  errors?: string[]
+  label: string;
+  errors?: string[];
 }
 
 export function NumberInput({ name, label, errors, ...props }: Props) {
@@ -18,5 +18,5 @@ export function NumberInput({ name, label, errors, ...props }: Props) {
         </div>
       ))}
     </div>
-  )
+  );
 }

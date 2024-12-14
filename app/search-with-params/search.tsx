@@ -1,15 +1,19 @@
-'use client'
+"use client";
 
-import Form from 'next/form'
-import { use, useState, useTransition } from 'react'
-import { SearchResult } from './lib'
-import { SearchResults } from './search-results'
+import Form from "next/form";
+import { use, useState, useTransition } from "react";
+import { SearchResult } from "./lib";
+import { SearchResults } from "./search-results";
 
-export function Search({ results }: { results: SearchResult[] | Promise<SearchResult[]> }) {
-  const [isPending, startTransition] = useTransition()
-  results = results instanceof Promise ? use(results) : results
-  const [query, setQuery] = useState('')
-  const [showResults, setShowResults] = useState(false)
+export function Search({
+  results,
+}: {
+  results: SearchResult[] | Promise<SearchResult[]>;
+}) {
+  const [isPending, startTransition] = useTransition();
+  results = results instanceof Promise ? use(results) : results;
+  const [query, setQuery] = useState("");
+  const [showResults, setShowResults] = useState(false);
 
   return (
     <div>
@@ -18,18 +22,18 @@ export function Search({ results }: { results: SearchResult[] | Promise<SearchRe
           name="query"
           className="bg-slate-900"
           onFocus={() => {
-            setShowResults(true)
+            setShowResults(true);
           }}
           onBlur={() => {
-            setShowResults(false)
+            setShowResults(false);
           }}
           value={query}
           onChange={(event) => {
-            setQuery(event.currentTarget.value)
+            setQuery(event.currentTarget.value);
 
             startTransition(() => {
-              event.currentTarget.form?.requestSubmit()
-            })
+              event.currentTarget.form?.requestSubmit();
+            });
           }}
         />
         <button formAction="/search-with-params/results" type="submit">
@@ -45,5 +49,5 @@ export function Search({ results }: { results: SearchResult[] | Promise<SearchRe
         </div>
       </Form>
     </div>
-  )
+  );
 }

@@ -1,32 +1,41 @@
-'use client'
+"use client";
 
-import { startTransition, useActionState, useDeferredValue, useEffect, useState } from 'react'
-import { Action, SearchResult } from './lib'
-import { SearchResults } from './search-results'
-import { SubmissionResult } from '@conform-to/react'
+import {
+  startTransition,
+  useActionState,
+  useDeferredValue,
+  useEffect,
+  useState,
+} from "react";
+import { Action, SearchResult } from "./lib";
+import { SearchResults } from "./search-results";
+import { SubmissionResult } from "@conform-to/react";
 
 export function Search({
   searchAction,
 }: {
-  searchAction: Action<{ lastResult: SubmissionResult | null; results: SearchResult[] }, FormData>
+  searchAction: Action<
+    { lastResult: SubmissionResult | null; results: SearchResult[] },
+    FormData
+  >;
 }) {
   const [{ results }, formAction, isPending] = useActionState(searchAction, {
     lastResult: null,
     results: [],
-  })
-  const [query, setQuery] = useState('')
-  const deferredQuery = useDeferredValue(query)
-  const [showResults, setShowResults] = useState(false)
+  });
+  const [query, setQuery] = useState("");
+  const deferredQuery = useDeferredValue(query);
+  const [showResults, setShowResults] = useState(false);
 
   useEffect(() => {
-    if (!showResults) return
+    if (!showResults) return;
 
     startTransition(async () => {
-      const formData = new FormData()
-      formData.append('query', deferredQuery)
-      formAction(formData)
-    })
-  }, [showResults, deferredQuery])
+      const formData = new FormData();
+      formData.append("query", deferredQuery);
+      formAction(formData);
+    });
+  }, [showResults, deferredQuery]);
 
   return (
     <div>
@@ -38,7 +47,7 @@ export function Search({
           onFocus={() => setShowResults(true)}
           onBlur={() => setShowResults(false)}
           onChange={(event) => {
-            setQuery(event.target.value)
+            setQuery(event.target.value);
           }}
         />
         <button type="submit">Search</button>
@@ -52,5 +61,5 @@ export function Search({
         </div>
       </form>
     </div>
-  )
+  );
 }
