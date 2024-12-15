@@ -12,6 +12,7 @@ const fields = [
     label: "Quantity",
     required: true,
     min: 10,
+    defaultValue: 5,
   },
   {
     type: "radio" as const,
@@ -23,6 +24,7 @@ const fields = [
       { label: "Large", value: "large" },
     ],
     required: true,
+    defaultValue: "small",
   },
   {
     type: "radio" as const,
@@ -33,12 +35,14 @@ const fields = [
       { label: "Green", value: "green" },
       { label: "Blue", value: "blue" },
     ],
+    defaultValue: "blue",
   },
   {
     type: "checkbox" as const,
     name: "insurance",
     label: "Include insurance?",
     required: true,
+    defaultValue: true,
   },
 ];
 
